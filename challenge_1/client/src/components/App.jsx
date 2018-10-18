@@ -8,7 +8,8 @@ export default class App extends React.Component {
         super();
         this.state ={
             query: '',
-            data: []
+            data: [], 
+            contenteditable: 'false'
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -19,7 +20,6 @@ export default class App extends React.Component {
         event.preventDefault();
         axios.get(`/events?_page=1&q=${this.state.query}`)
         .then(response => {
-            console.log(response);
             this.setState({data: response.data})
         })
         .catch(error => {
@@ -36,7 +36,6 @@ export default class App extends React.Component {
     
         axios.get(`/events?_page=${selected}&q=${this.state.query}`)
         .then(response => {
-            console.log(response);
             this.setState({data: response.data})
         })
         .catch(error => {
@@ -47,7 +46,7 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-            <div> History </div> 
+            <h1> Historical Events </h1> 
             <form onSubmit={this.handleSubmit}>
             <label>
             Search:
@@ -55,8 +54,12 @@ export default class App extends React.Component {
             </label>
             <input type="submit" value="Submit" />
             </form>
+            <input type="submit" value="Edit" />
+            <input type="submit" value="Save" />
             <div>
-            <Events data={this.state.data}/>
+                {
+                   this.state.data.length !== 0 ? <Events data={this.state.data} /> : <div> No content to display </div> 
+                }
             </div>
             <div>
             <ReactPaginate previousLabel={"previous"}
